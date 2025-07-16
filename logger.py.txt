@@ -1,0 +1,5 @@
+from datetime import datetime
+
+def log_attempt(ip, username, password):
+    with open("logs.txt", "a") as f:
+        f.write(f"{datetime.now()} - IP: {ip} - USER: {username} - PASS: {password}\n")

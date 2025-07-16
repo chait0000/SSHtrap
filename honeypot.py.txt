@@ -1,0 +1,22 @@
+import socket
+from logger import log_attempt
+
+HOST = '0.0.0.0'
+PORT = 2222  # fake SSH
+
+server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+server.bind((HOST, PORT))
+server.listen(5)
+
+print(f"[+] Honeypot listening on port {PORT}")
+
+while True:
+    client, address = server.accept()
+    print(f"[!] Connection from {address}")
+    client.send(b"Username: ")
+    username = client.recv(1024).strip()
+    client.send(b"Password: ")
+    password = client.recv(1024).strip()
+    log_attempt(address[0], username.decode(), password.decode())
+    client.send(b"Access Denied\r\n")
+    client.close()
